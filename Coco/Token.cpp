@@ -11,6 +11,7 @@ Token::Token(string identifier, Tok type) {
     this->identifier = identifier;
     this->value = 0;
     this->type = type;
+    /* NETBEANS AM ARSCH*/
 }
 
 Token::Token(float value, Tok type){
