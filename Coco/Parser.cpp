@@ -21,9 +21,10 @@ void Parser::Lexer(string filepath) {
     char ch;
     string identifier;
     while (fin >> noskipws >> ch) {
-        while (isspace(ch)) {
+        
+        while (isspace(ch) && !fin.eof()) {
             if (ch == '\n') {
-                //count lines
+                // count lines
             }
             fin >> noskipws >> ch; // get next char
         }
@@ -85,11 +86,147 @@ void Parser::Lexer(string filepath) {
 }
 
 void Parser::parse(){
-    this->it = this->tokens.begin();
+    while (!this->tokens.empty()){
+        this->currentLineValid = false;
+        this->it = this->tokens.begin();
+        string var;
+        float rechnung;
+        var = this->G2();
+        rechnung = E();
+        if (this->currentLineValid && var != ""){
+            this->symbol_table[var] = rechnung;
+        }
+        
+        else {
+            cout << "ENDE: " << rechnung << endl;
+        }
+        
+        Token t = this->tokens.front();
+        while (t.getType() != tok_semi){
+            this->tokens.pop_front();
+            t = this->tokens.front();
+        }
+        this->tokens.pop_front();
+    //löschen der zeile bis semikolon
+    }
 }
 
-float Parser::G2(){
+string Parser::G2(){
+    if ((*it).getType() == tok_identifier){
+        string var = (*it).getIdentifier();
+        bool ret = this->D2();
+        if (ret){
+            //es is ne zuweisung
+            ++it;
+            return var;
+        }
+        else {
+            it = this->tokens.begin(); //we know it's not an assignment, start from scratch
+            return "";
+        }
+    }
+    else {
+        //we know it's not an assignment, start from scratch
+        return "";
+    }
+}
+
+bool Parser::D2(){
+    ++it;
+    if ((*it).getType() == tok_assign){
+        return true;
+    }
+    else return false;
+}
+
+float Parser::E(){
     
+    float t = this->T();
+    t += this->E2();
+    return t;
+    /**
+     * 
+     * TODO Rechnen
+     * @return 
+     */
+}
+
+float Parser::T(){
+    float f = this->F();
+    float t2 = this->T2();
+    f *= t2;
+    return f;
+}
+
+float Parser::E2(){
+    ++it;
+    string op = (*it).getIdentifier();
+    float t;
+    if (op == "+"){
+        ++it;
+        t = this->T();
+        return t + this->E2();
+    }
+    else if (op == "-"){
+        ++it;
+        t = this->T();
+        return -t + this->E2();
+    }
+    else if (';'){
+        this->currentLineValid = true;
+        return 0;
+    }
+    
+    else {
+        return 0;
+    }
+}
+
+float Parser::T2(){
+    ++it;
+    string op = (*it).getIdentifier();
+    Tok tok = (*it).getType();
+    float f;
+    if (op == "*"){
+        ++it;
+        f = this->F();
+        return f * this->T2();
+    }
+    else if (op == "/"){
+        ++it;
+        f = this->F();
+        return (1/f) * this->T2();
+    }
+    
+    else if (tok == tok_identifier || tok == tok_number){
+        cerr << "\033[1;31mERROR: Operator expected\033[0m" << endl;
+        exit(1);
+    }
+    
+    else {
+       std::advance(it, -1); 
+       return 1;
+    }
+}
+
+float Parser::F(){
+    if ((*it).getType() == tok_number){
+        return (*it).getValue();
+    }
+    else if ((*it).getType() == tok_identifier) {
+        if (this->symbol_table.find( (*it).getIdentifier() ) == this->symbol_table.end()){
+            cerr << "Error: Variable does not exist" << endl;
+            exit(1);
+        }
+        else {
+            return this->symbol_table.at( (*it).getIdentifier() );
+        }
+    }
+    
+    else {
+        cerr << "ERROR: Number or variable expected" << endl;
+        exit(1);
+    }
 }
 
 void Parser::printAndEmptyList() {

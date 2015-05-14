@@ -5,7 +5,7 @@
 #include "Parser.h"
 using namespace std;
 
-const string filepath = "/home/orkanone/wat";
+const string filepath = "wat";
 //whassuuuuuuuuuuuup
 int main(int argc, char** argv) {
     Parser myParser;
