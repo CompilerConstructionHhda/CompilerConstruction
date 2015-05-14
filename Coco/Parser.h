@@ -36,6 +36,7 @@ public:
 private:
     list <Token> tokens;
     map <string, float> symbol_table;
+    list<Token>::iterator it;
     
 };
 

@@ -85,12 +85,10 @@ void Parser::Lexer(string filepath) {
 }
 
 void Parser::parse(){
-    list<Token>::iterator it;
-    it = this->tokens.begin();
-    it++;
-    cout << (*it).getIdentifier() << endl;
-    it++;
-    cout << (*it).getIdentifier() << endl;
+    this->it = this->tokens.begin();
+}
+
+float Parser::G2(){
     
 }
 
