@@ -215,7 +215,7 @@ float Parser::F(){
     }
     else if ((*it).getType() == tok_identifier) {
         if (this->symbol_table.find( (*it).getIdentifier() ) == this->symbol_table.end()){
-            cerr << "Error: Variable does not exist" << endl;
+            cerr << "\033[1;31mError: Variable does not exist\033[0m" << endl;
             exit(1);
         }
         else {
@@ -224,7 +224,7 @@ float Parser::F(){
     }
     
     else {
-        cerr << "ERROR: Number or variable expected" << endl;
+        cerr << "\033[1;31mERROR: Number or variable expected\033[0m" << endl;
         exit(1);
     }
 }
