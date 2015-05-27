@@ -1,0 +1,5 @@
+pi := 24 + 4;
+var := 4 * 3;
+pi := pi + var;
+pi;
+var;

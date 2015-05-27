@@ -98,7 +98,7 @@ void Parser::parse(){
         }
         
         else {
-            cout << "ENDE: " << rechnung << endl;
+            cout << rechnung << endl;
         }
         
         Token t = this->tokens.front();
@@ -244,5 +244,3 @@ void Parser::printAndEmptyList() {
         }
     }
 }
-
-
