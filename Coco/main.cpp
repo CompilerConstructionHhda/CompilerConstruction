@@ -6,9 +6,9 @@
 using namespace std;
 
 const string filepath = "test_ok";
-const string filepath = "test_missing_operator";
-const string filepath = "test_missing_operand";
-const string filepath = "test_missing_var";
+//const string filepath = "test_missing_operator";
+//const string filepath = "test_missing_operand";
+//const string filepath = "test_missing_var";
 
 int main(int argc, char** argv) {
     Parser myParser;

@@ -8,6 +8,7 @@
 #ifndef PARSER_H
 #define	PARSER_H
 
+#include "TreeNode.h"
 #include "Token.h"
 #include "tok.h"
 #include <list>
@@ -37,7 +38,8 @@ private:
     map <string, float> symbol_table;
     list<Token>::iterator it;
     bool currentLineValid;
-    
+    TreeNode* currentTreeNode;
+    TreeNode* firstTreeNode;
 };
 
 #endif	/* PARSER_H */

@@ -86,6 +86,11 @@ void Parser::Lexer(string filepath) {
 }
 
 void Parser::parse(){
+    
+    firstTreeNode = new ZNode();
+    currentTreeNode = firstTreeNode;
+    
+    
     while (!this->tokens.empty()){
         this->currentLineValid = false;
         this->it = this->tokens.begin();
