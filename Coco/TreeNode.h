@@ -14,27 +14,39 @@ class TreeNode {
 public:
     TreeNode(){}
     
-    void setLeft(TreeNode* Left){
+    TreeNode* getLeft() const {
+        return Left;
+    }
+
+    void setLeft(TreeNode* Left) {
         this->Left = Left;
-    };
+    }
+
+    TreeNode* getParent() const {
+        return Parent;
+    }
+
+    void setParent(TreeNode* Parent) {
+        this->Parent = Parent;
+    }
+
+    TreeNode* getRight() const {
+        return Right;
+    }
+
+    void setRight(TreeNode* Right) {
+        this->Right = Right;
+    }
     
     void deleteLeft(){
         delete Left;
         Left = NULL;
     }
     
-    void setRight(TreeNode* Right){
-        this->Right = Right;
-    };
-    
     void deleteRight(){
         delete Right;
         Right = NULL;
     }
-    
-    void setParent(TreeNode* Parent){
-        this->Parent = Parent;
-    };
 
 private:
     TreeNode* Left;
