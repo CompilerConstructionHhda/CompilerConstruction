@@ -56,14 +56,19 @@ private:
 
 class ZNode : public TreeNode {
 public:
-    ZNode(){}   
+    ZNode(G2Node left, ENode right){
+        this->setLeft(left);
+        this->setRight(right);
+    }   
 
 private:
 };
 
 class G2Node : public TreeNode {
 public:
-    G2Node(){}
+    G2Node(){
+    
+    }
     void setVar(string var){
         this->var = var;
     }

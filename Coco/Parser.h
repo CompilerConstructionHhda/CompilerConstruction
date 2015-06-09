@@ -25,6 +25,7 @@ public:
     void Lexer(string filepath);
     void printAndEmptyList();
     void parse(); //primary node Z()
+    void buildSyntaxTree();
     
     string G2(); //is it an assignment or not
     bool D2(); // := or nothing
@@ -39,7 +40,7 @@ private:
     list<Token>::iterator it;
     bool currentLineValid;
     TreeNode* currentTreeNode;
-    TreeNode* firstTreeNode;
+    TreeNode* root;
 };
 
 #endif	/* PARSER_H */

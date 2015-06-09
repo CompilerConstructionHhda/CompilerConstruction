@@ -85,11 +85,7 @@ void Parser::Lexer(string filepath) {
 
 }
 
-void Parser::parse(){
-    
-    firstTreeNode = new ZNode();
-    currentTreeNode = firstTreeNode;
-    
+void Parser::parse(){ 
     
     while (!this->tokens.empty()){
         this->currentLineValid = false;
@@ -116,10 +112,16 @@ void Parser::parse(){
     }
 }
 
+void Parser::buildSyntaxTree(){
+    this->currentLineValid = false;
+    this->it = this->tokens.begin();
+    this->root = new ZNode(new G2Node(), new E2Node());
+}
+
 string Parser::G2(){
     if ((*it).getType() == tok_identifier){
         string var = (*it).getIdentifier();
-        bool ret = this->D2();
+        bool ret = this->D2();        
         if (ret){
             //es is ne zuweisung
             ++it;
