@@ -13,6 +13,7 @@
 #include "tok.h"
 #include <list>
 #include <map>
+#include <vector>
 #include <fstream>
 #include <iostream>
 using namespace std;
@@ -41,7 +42,7 @@ private:
     list<Token>::iterator it;
     bool currentLineValid;
     TreeNode* currentNode;
-    TreeNode* root;
+    vector<TreeNode*> root;
 };
 
 #endif	/* PARSER_H */

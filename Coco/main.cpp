@@ -17,7 +17,6 @@ int main(int argc, char** argv) {
     myParser.parse();
     myParser.printSyntaxTree();
     //myParser.printSymbolTable();
-    //myParser.printSyntaxTree();
     return 0;
 }
 

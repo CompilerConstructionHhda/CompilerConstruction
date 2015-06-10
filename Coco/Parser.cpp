@@ -107,8 +107,8 @@ void Parser::parse(){
     while (!this->tokens.empty()){
         this->currentLineValid = false;
         this->it = this->tokens.begin();
-        this->root = new ZNode();
-        this->currentNode = this->root;
+        this->root.push_back(new ZNode());
+        this->currentNode = this->root.back();
         string var;
         float rechnung;
         var = this->G2();
@@ -291,7 +291,9 @@ float Parser::F(){
 }
 
 void Parser::printSyntaxTree(){
-    this->root->print(0);
+    for(int i=0; i<root.size(); i++){
+        this->root.at(i)->print(0);
+    }
 }
 
 void Parser::printSymbolTable(){
