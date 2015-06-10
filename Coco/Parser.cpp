@@ -8,6 +8,23 @@
 #include "Parser.h"
 
 Parser::Parser() {
+    /*this->root = new ZNode();
+    G2Node* leftchild = new G2Node();
+    leftchild->setVar("lala");
+    D2Node* leftleftgrandchild = new D2Node();
+    
+    ENode* rightchild = new ENode();
+    FNode* rightleftgrandchild = new FNode();
+    E2Node* rightrightgrandchild = new E2Node();
+    
+    leftchild->setLeft(leftleftgrandchild);
+    
+    rightchild->setLeft(rightleftgrandchild);
+    rightchild->setRight(rightrightgrandchild);
+    
+    this->root->setLeft(leftchild);
+    this->root->setRight(rightchild);
+     */    
 }
 
 Token Parser::getNextToken() {
@@ -90,7 +107,7 @@ void Parser::parse(){
     while (!this->tokens.empty()){
         this->currentLineValid = false;
         this->it = this->tokens.begin();
-        this->root = new ZNode();
+        //this->root = new ZNode();
         string var;
         float rechnung;
         var = this->G2();
@@ -232,7 +249,7 @@ float Parser::F(){
 }
 
 void Parser::printSyntaxTree(){
-    
+    this->root->print(0);
 }
 
 void Parser::printSymbolTable(){
