@@ -155,6 +155,8 @@ string Parser::G2(){
     }
     else {
         //we know it's not an assignment, start from scratch
+        this->currentNode = this->currentNode->getParent();
+        this->currentNode->setLeft(NULL);
         return "";
     }
 }
