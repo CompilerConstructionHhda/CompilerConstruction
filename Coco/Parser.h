@@ -25,6 +25,8 @@ public:
     void Lexer(string filepath);
     void printAndEmptyList();
     void parse(); //primary node Z()
+    void printSyntaxTree();
+    void printSymbolTable();
     
     string G2(); //is it an assignment or not
     bool D2(); // := or nothing

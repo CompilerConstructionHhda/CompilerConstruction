@@ -231,6 +231,17 @@ float Parser::F(){
     }
 }
 
+void Parser::printSyntaxTree(){
+    
+}
+
+void Parser::printSymbolTable(){
+    map<string, float>::iterator it;
+    for(it = symbol_table.begin(); it != symbol_table.end(); it++) {
+        cout << it->first << " : " << it->second << endl;
+    }
+}
+
 void Parser::printAndEmptyList() {
     while (!this->tokens.empty()) {
         Token currentToken = getNextToken();

@@ -13,8 +13,8 @@ const string filepath = "test_ok";
 int main(int argc, char** argv) {
     Parser myParser;
     myParser.Lexer(filepath);
-    //myParser.parse();
-    myParser.buildSyntaxTree();
+    myParser.parse();
+    myParser.printSymbolTable();
     return 0;
 }
 
