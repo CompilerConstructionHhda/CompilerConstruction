@@ -90,6 +90,7 @@ void Parser::parse(){
     while (!this->tokens.empty()){
         this->currentLineValid = false;
         this->it = this->tokens.begin();
+        this->root = new ZNode();
         string var;
         float rechnung;
         var = this->G2();
@@ -110,12 +111,6 @@ void Parser::parse(){
         this->tokens.pop_front();
     //löschen der zeile bis semikolon
     }
-}
-
-void Parser::buildSyntaxTree(){
-    this->currentLineValid = false;
-    this->it = this->tokens.begin();
-    this->root = new ZNode(new G2Node(), new E2Node());
 }
 
 string Parser::G2(){

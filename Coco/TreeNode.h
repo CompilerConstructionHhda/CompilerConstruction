@@ -56,6 +56,7 @@ private:
 
 class ZNode : public TreeNode {
 public:
+    ZNode();
     ZNode(G2Node left, ENode right){
         this->setLeft(left);
         this->setRight(right);
