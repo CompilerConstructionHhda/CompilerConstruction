@@ -107,7 +107,8 @@ void Parser::parse(){
     while (!this->tokens.empty()){
         this->currentLineValid = false;
         this->it = this->tokens.begin();
-        //this->root = new ZNode();
+        this->root = new ZNode();
+        this->currentNode = this->root;
         string var;
         float rechnung;
         var = this->G2();
@@ -131,16 +132,24 @@ void Parser::parse(){
 }
 
 string Parser::G2(){
+    this->currentNode->setLeft(new G2Node());
+    this->currentNode = this->currentNode->getLeft();
     if ((*it).getType() == tok_identifier){
         string var = (*it).getIdentifier();
         bool ret = this->D2();        
         if (ret){
             //es is ne zuweisung
             ++it;
+            G2Node* tmp = static_cast<G2Node*> (this->currentNode);
+            tmp->setVar(var);
+            this->currentNode = this->currentNode->getParent();
             return var;
+            
         }
         else {
             it = this->tokens.begin(); //we know it's not an assignment, start from scratch
+            this->currentNode = this->currentNode->getParent();
+            this->currentNode->setLeft(NULL);
             return "";
         }
     }
@@ -152,16 +161,19 @@ string Parser::G2(){
 
 bool Parser::D2(){
     ++it;
-    if ((*it).getType() == tok_assign){
+    if ((*it).getType() == tok_assign){      
+        this->currentNode->setLeft(new D2Node());
         return true;
     }
     else return false;
 }
 
 float Parser::E(){
-    
+    this->currentNode->setRight(new ENode());
+    this->currentNode = this->currentNode->getRight();
     float t = this->T();
     t += this->E2();
+    this->currentNode->getParent();
     return t;
     /**
      * 
@@ -171,28 +183,42 @@ float Parser::E(){
 }
 
 float Parser::T(){
+    this->currentNode->setLeft(new TNode());
+    this->currentNode = this->currentNode->getLeft();
     float f = this->F();
     float t2 = this->T2();
     f *= t2;
+    this->currentNode = this->currentNode->getParent();
     return f;
 }
 
 float Parser::E2(){
+    this->currentNode->setRight(new E2Node());
+    this->currentNode = this->currentNode->getRight();
+    E2Node* tmp = static_cast<E2Node*>(this->currentNode);
     ++it;
     string op = (*it).getIdentifier();
-    float t;
+    float t, e2;
     if (op == "+"){
         ++it;
+        tmp->setOperator("+");
         t = this->T();
-        return t + this->E2();
+        e2 = this->E2();
+        this->currentNode = this->currentNode->getParent();
+        return t + e2;
     }
     else if (op == "-"){
         ++it;
+        tmp->setOperator("-");
         t = this->T();
-        return -t + this->E2();
+        e2 = this->E2();
+        this->currentNode = this->currentNode->getParent();
+        return -t + e2;
     }
     else if (';'){
+        tmp->setOperator(";");
         this->currentLineValid = true;
+        this->currentNode = this->currentNode->getParent();
         return 0;
     }
     
@@ -202,19 +228,28 @@ float Parser::E2(){
 }
 
 float Parser::T2(){
+    this->currentNode->setRight(new T2Node());
+    this->currentNode = this->currentNode->getRight();
+    T2Node* tmp = static_cast<T2Node*>(this->currentNode);
     ++it;
     string op = (*it).getIdentifier();
     Tok tok = (*it).getType();
-    float f;
+    float f, t2;
     if (op == "*"){
         ++it;
+        tmp->setOperator("*");
         f = this->F();
-        return f * this->T2();
+        t2 = this->T2();
+        this->currentNode = this->currentNode->getParent();
+        return f * t2;
     }
     else if (op == "/"){
         ++it;
+        tmp->setOperator("/");
         f = this->F();
-        return (1/f) * this->T2();
+        t2 = this->T2();
+        this->currentNode = this->currentNode->getParent();
+        return (1/f) * t2;
     }
     
     else if (tok == tok_identifier || tok == tok_number){
@@ -223,13 +258,17 @@ float Parser::T2(){
     }
     
     else {
-       std::advance(it, -1); 
+       std::advance(it, -1);
+       this->currentNode = this->currentNode->getParent();
        return 1;
     }
 }
 
 float Parser::F(){
+    this->currentNode->setLeft(new FNode());
+    FNode* tmp = static_cast<FNode*>(this->currentNode->getLeft());
     if ((*it).getType() == tok_number){
+        tmp->setID((*it).getValue());
         return (*it).getValue();
     }
     else if ((*it).getType() == tok_identifier) {
@@ -238,6 +277,7 @@ float Parser::F(){
             exit(1);
         }
         else {
+            tmp->setVar((*it).getIdentifier());
             return this->symbol_table.at( (*it).getIdentifier() );
         }
     }

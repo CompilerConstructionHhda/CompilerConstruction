@@ -12,14 +12,24 @@
 using namespace std;
 class TreeNode {
 public:
-    TreeNode(){}
+    TreeNode(){
+        this->Parent = NULL;
+        this->Left = NULL;
+        this->Right = NULL;
+    }
     
     TreeNode* getLeft() const {
         return Left;
     }
 
     void setLeft(TreeNode* Left) {
-        this->Left = Left;
+        if(Left == NULL){
+            delete this->Left;
+            this->Left = NULL;
+        }else{
+            this->Left = Left;
+            Left->setParent(this);
+        }
     }
 
     TreeNode* getParent() const {
@@ -35,17 +45,13 @@ public:
     }
 
     void setRight(TreeNode* Right) {
-        this->Right = Right;
-    }
-    
-    void deleteLeft(){
-        delete Left;
-        Left = NULL;
-    }
-    
-    void deleteRight(){
-        delete Right;
-        Right = NULL;
+        if(Right == NULL){
+            delete this->Right;
+            this->Right = NULL;
+        }else{
+            this->Right = Right;
+            Right->setParent(this);
+        }
     }
     
     virtual void print(int count) = 0;
@@ -112,7 +118,7 @@ public:
         for (int i = 0; i < count; i++){
             cout << "\t";
         }
-        cout << "D2Node" << this->Semicolon << endl;
+        cout << "D2Node" << this->Assign << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -122,7 +128,7 @@ public:
         }
     }
 private:
-    string Semicolon = ":=";
+    string Assign = ":=";
 };
 
 class ENode : public TreeNode {
@@ -146,7 +152,12 @@ private:
 
 class E2Node : public TreeNode {
 public:
-    E2Node(){}   
+    E2Node(){}
+    
+    void setOperator(string Operator){
+        this->Operator = Operator;
+    }
+    
     virtual void print(int count){
         for (int i = 0; i < count; i++){
             cout << "\t";
@@ -161,6 +172,7 @@ public:
         }
     }
 private:
+    string Operator;
 };
 
 class TNode : public TreeNode {
@@ -184,7 +196,12 @@ private:
 
 class T2Node : public TreeNode {
 public:
-    T2Node(){}  
+    T2Node(){}
+    
+    void setOperator(string Operator){
+        this->Operator = Operator;
+    }
+    
     virtual void print(int count){
         for (int i = 0; i < count; i++){
             cout << "\t";
@@ -199,11 +216,13 @@ public:
         }
     }
 private:
+    string Operator;
 };
 
 class FNode : public TreeNode {
 public:
     FNode(){}
+    
     void setVar(string var){
         this->var = var;
     }

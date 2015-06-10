@@ -40,7 +40,7 @@ private:
     map <string, float> symbol_table;
     list<Token>::iterator it;
     bool currentLineValid;
-    TreeNode* currentTreeNode;
+    TreeNode* currentNode;
     TreeNode* root;
 };
 
