@@ -62,7 +62,7 @@ public:
         for (int i = 0; i < count; i++){
             cout << "\t";
         }
-        cout << "ZNode" << endl;
+        cout << "Z" << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -91,7 +91,11 @@ public:
             else cout << "\t";
         }
         
-        cout << "G2Node: " << this->var << endl;
+        cout << "G2";
+        if (this->var != ""){
+        cout << "____identifier: " << this->var;
+        }
+        cout << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -121,7 +125,11 @@ public:
             else cout << "\t";
         
         }
-        cout << "D2Node: " << this->Operator << endl;
+        cout << "D ";
+        if (this->Operator != ""){
+            cout << "____ " << this->Operator;
+        }
+        cout << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -144,7 +152,7 @@ public:
             }
             else cout << "\t";
         }
-        cout << "ENode" << endl;
+        cout << "E" << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -171,7 +179,11 @@ public:
             }
             else cout << "\t";
         }
-        cout << "E2Node: " << this->Operator << endl;
+        cout << "E'";
+        if (this->Operator != ""){
+            cout << " ____ " << this->Operator;
+        }
+        cout << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -194,7 +206,7 @@ public:
             }
             else cout << "\t";
         }
-        cout << "TNode" << endl;
+        cout << "T" << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -221,7 +233,11 @@ public:
             }
             else cout << "\t";
         }
-        cout << "T2Node" << this->Operator << endl;
+        cout << "T' ";
+        if (this->Operator != ""){
+            cout << "____" << this->Operator;
+        }
+        cout << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -254,9 +270,9 @@ public:
             else cout << "\t";
         }
         if(var != "")
-            cout << "FNode: " << this->var << endl;
+            cout << "F ____ var: " << this->var << endl;
         else
-            cout << "FNode: " << this->id << endl;
+            cout << "F ____ number: " << this->id << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
