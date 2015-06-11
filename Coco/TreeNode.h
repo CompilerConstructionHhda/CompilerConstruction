@@ -23,13 +23,9 @@ public:
     }
 
     void setLeft(TreeNode* Left) {
-        if(Left == NULL){
-            delete this->Left;
-            this->Left = NULL;
-        }else{
-            this->Left = Left;
-            Left->setParent(this);
-        }
+        this->Left = Left;
+        Left->setParent(this);
+        
     }
 
     TreeNode* getParent() const {
@@ -45,13 +41,8 @@ public:
     }
 
     void setRight(TreeNode* Right) {
-        if(Right == NULL){
-            delete this->Right;
-            this->Right = NULL;
-        }else{
-            this->Right = Right;
-            Right->setParent(this);
-        }
+        this->Right = Right;
+        Right->setParent(this);
     }
     
     virtual void print(int count) = 0;
@@ -107,18 +98,22 @@ public:
     }
     
 private:
-    string var;
+    string var = "";
 };
 
 class D2Node : public TreeNode {
 public:
     D2Node(){}
     
+    void setOperator(string Operator){
+        this->Operator = Operator;
+    }
+    
     virtual void print(int count){
         for (int i = 0; i < count; i++){
             cout << "\t";
         }
-        cout << "D2Node" << this->Assign << endl;
+        cout << "D2Node: " << this->Operator << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -128,7 +123,7 @@ public:
         }
     }
 private:
-    string Assign = ":=";
+    string Operator = "";
 };
 
 class ENode : public TreeNode {
@@ -162,7 +157,7 @@ public:
         for (int i = 0; i < count; i++){
             cout << "\t";
         }
-        cout << "E2Node" << endl;
+        cout << "E2Node: " << this->Operator << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -172,7 +167,7 @@ public:
         }
     }
 private:
-    string Operator;
+    string Operator = "";
 };
 
 class TNode : public TreeNode {
@@ -206,7 +201,7 @@ public:
         for (int i = 0; i < count; i++){
             cout << "\t";
         }
-        cout << "T2Node" << endl;
+        cout << "T2Node" << this->Operator << endl;
         count++;
         if (this->Left != NULL){
             this->Left->print(count);
@@ -216,7 +211,7 @@ public:
         }
     }
 private:
-    string Operator;
+    string Operator = "";
 };
 
 class FNode : public TreeNode {
@@ -235,7 +230,10 @@ public:
         for (int i = 0; i < count; i++){
             cout << "\t";
         }
-        cout << "FNode" << endl;
+        if(var != "")
+            cout << "FNode: " << this->var << endl;
+        else
+            cout << "FNode: " << this->id << endl;
         count++;
         cout <<  endl;
         if (this->Left != NULL){
@@ -246,7 +244,7 @@ public:
         }
     }
 private:
-    string var;
+    string var = "";
     int id;
 };
 #endif	/* TREENODE_H */

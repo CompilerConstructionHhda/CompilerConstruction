@@ -149,25 +149,30 @@ string Parser::G2(){
         else {
             it = this->tokens.begin(); //we know it's not an assignment, start from scratch
             this->currentNode = this->currentNode->getParent();
-            this->currentNode->setLeft(NULL);
             return "";
         }
     }
     else {
         //we know it's not an assignment, start from scratch
         this->currentNode = this->currentNode->getParent();
-        this->currentNode->setLeft(NULL);
         return "";
     }
 }
 
 bool Parser::D2(){
+    this->currentNode->setLeft(new D2Node());
+    this->currentNode = this->currentNode->getLeft();
+    D2Node* tmp = static_cast<D2Node*>(this->currentNode);
     ++it;
-    if ((*it).getType() == tok_assign){      
-        this->currentNode->setLeft(new D2Node());
+    if ((*it).getType() == tok_assign){  
+        tmp->setOperator(":=");
+        this->currentNode = this->currentNode->getParent();
         return true;
     }
-    else return false;
+    else{
+        this->currentNode = this->currentNode->getParent();
+        return false;
+    }
 }
 
 float Parser::E(){
