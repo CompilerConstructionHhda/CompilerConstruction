@@ -85,8 +85,12 @@ public:
 
     virtual void print(int count){
         for (int i = 0; i < count; i++){
-            cout << "\t";
+            if (i == count-1){
+                cout <<"|----";
+            }
+            else cout << "\t";
         }
+        
         cout << "G2Node: " << this->var << endl;
         count++;
         if (this->Left != NULL){
@@ -111,7 +115,11 @@ public:
     
     virtual void print(int count){
         for (int i = 0; i < count; i++){
-            cout << "\t";
+            if (i == count-1){
+                cout <<"|----";
+            }
+            else cout << "\t";
+        
         }
         cout << "D2Node: " << this->Operator << endl;
         count++;
@@ -131,7 +139,10 @@ public:
     ENode(){}   
     virtual void print(int count){
         for (int i = 0; i < count; i++){
-            cout << "\t";
+            if (i == count-1){
+                cout <<"|----";
+            }
+            else cout << "\t";
         }
         cout << "ENode" << endl;
         count++;
@@ -155,7 +166,10 @@ public:
     
     virtual void print(int count){
         for (int i = 0; i < count; i++){
-            cout << "\t";
+            if (i == count-1){
+                cout <<"|----";
+            }
+            else cout << "\t";
         }
         cout << "E2Node: " << this->Operator << endl;
         count++;
@@ -175,7 +189,10 @@ public:
     TNode(){}    
     virtual void print(int count){
         for (int i = 0; i < count; i++){
-            cout << "\t";
+                if (i == count-1){
+                cout <<"|----";
+            }
+            else cout << "\t";
         }
         cout << "TNode" << endl;
         count++;
@@ -199,7 +216,10 @@ public:
     
     virtual void print(int count){
         for (int i = 0; i < count; i++){
-            cout << "\t";
+             if (i == count-1){
+                cout <<"|----";
+            }
+            else cout << "\t";
         }
         cout << "T2Node" << this->Operator << endl;
         count++;
@@ -228,14 +248,16 @@ public:
 
     virtual void print(int count){
         for (int i = 0; i < count; i++){
-            cout << "\t";
+                if (i == count-1){
+                cout <<"|----";
+            }
+            else cout << "\t";
         }
         if(var != "")
             cout << "FNode: " << this->var << endl;
         else
             cout << "FNode: " << this->id << endl;
         count++;
-        cout <<  endl;
         if (this->Left != NULL){
             this->Left->print(count);
         }
