@@ -1,9 +1,9 @@
 func pow(x){
     x := x*x;
-    return x;
+    return 1;
 }
 
+
 func main() {
-pi := 24 + 4;
-pi;
+    pow(4);
 }

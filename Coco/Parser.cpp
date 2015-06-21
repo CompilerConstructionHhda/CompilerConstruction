@@ -8,23 +8,6 @@
 #include "Parser.h"
 
 Parser::Parser() {
-    /*this->root = new ZNode();
-    G2Node* leftchild = new G2Node();
-    leftchild->setVar("lala");
-    D2Node* leftleftgrandchild = new D2Node();
-    
-    ENode* rightchild = new ENode();
-    FNode* rightleftgrandchild = new FNode();
-    E2Node* rightrightgrandchild = new E2Node();
-    
-    leftchild->setLeft(leftleftgrandchild);
-    
-    rightchild->setLeft(rightleftgrandchild);
-    rightchild->setRight(rightrightgrandchild);
-    
-    this->root->setLeft(leftchild);
-    this->root->setRight(rightchild);
-     */    
 }
 
 Token Parser::getNextToken() {
@@ -69,11 +52,13 @@ void Parser::Lexer(string filepath) {
                         this->tokens.push_back(Token(identifier, tok_func_decl));
                         fin >> noskipws >> ch;
                         identifier = "";
-                        while (isalnum(ch) && !fin.eof()){
-                            identifier += ch;
-                            fin >> noskipws >> ch;
-                        }
-                        break;
+                    }
+                }
+                if (identifier == "return"){
+                    if (ch == ' '){
+                        this->tokens.push_back(Token(identifier, tok_return));
+                        fin >> noskipws >> ch;
+                        identifier ="";
                     }
                 }
             }
@@ -164,6 +149,10 @@ void Parser::func(){
                     cerr << "\033[1;31mERROR: End of file before function ends\033[0m" << endl;
                     exit(1); 
                 }
+                
+                if ((*it).getType() == tok_identifier && (*it).getIdentifier() == "return"){
+                    this->currentFunction->setIsVoid(false);
+                }
                 it++;
             }
             it++;
@@ -212,9 +201,9 @@ void Parser::param(bool lastIsComma){
     }
 }
 
-void Parser::parse(list<Token>::iterator it){ 
-    this->it = it;
-    while ((*it).getType() != tok_eof){
+float Parser::parse(list<Token>::iterator itparam){ 
+    this->it = itparam;
+    while ((*it).getType() != tok_eof && (*it).getType() != end_code_block){
         this->currentLineValid = false;
         
         //it is func_declaration?
@@ -224,14 +213,26 @@ void Parser::parse(list<Token>::iterator it){
         this->currentNode = this->root.back();
         string var;
         float rechnung;
-        var = this->G2();
-        rechnung = E();
-        if (this->currentLineValid && var != ""){
-            this->symbol_table[var] = rechnung;
+        
+        if ((*it).getType() == tok_return){
+            it++;
+            return E();
         }
         
-        else {
-            cout << rechnung << endl;
+        else{
+
+            var = this->G2();
+            rechnung = E();
+
+            if (this->currentLineValid && var != ""){
+                this->currentFunction->symbol_table[var] = rechnung;
+            }
+
+            //if func !isvoid : return float
+
+            else {
+                cout << rechnung << endl;
+            }
         }
         it++;
         /*
@@ -395,13 +396,72 @@ float Parser::F(){
         return (*it).getValue();
     }
     else if ((*it).getType() == tok_identifier) {
-        if (this->symbol_table.find( (*it).getIdentifier() ) == this->symbol_table.end()){
+        string identifier = (*it).getIdentifier();
+        it++;
+        if ((*it).getType() == tok_left_par){
+            //MOFO function call!
+            //Function* nextfunction = new Function();
+            //nextfunction = this->function_table[ identifier ];
+            it++;
+            list<string>::iterator iter;
+            list<string> inputParams = this->function_table[ identifier ]->getInputParams();
+            for (iter = inputParams.begin(); iter != inputParams.end(); iter++){
+                if ( (*it).getType() == tok_identifier || (*it).getType() == tok_number){
+                    this->function_table[ identifier ]->symbol_table[(*iter)] = F();
+                    it++;
+                    if ((*it).getType() == tok_comma){
+                        it++;
+                        continue;
+                    }
+                    else if ((*it).getType() == tok_right_par){
+                        it++;
+                        break;
+                    }
+                }
+                else {
+                   cerr << "\033[1;31mError: Unexpected token in function call\033[0m" << endl;
+                   exit(1);
+                }
+                
+            }
+            
+            //save iterator (rücksprung)
+            list<Token>::iterator saved_it = this->it;
+            //save currentFunction
+            Function* saved_function = this->currentFunction;
+            //currentFunction = nextfunction
+            this->currentFunction = this->function_table[ identifier ];
+            //funktion ausführen
+            float returnparam = parse(this->currentFunction->GetIt());
+            
+            //get old values
+            this->it = saved_it;
+            this->currentFunction = saved_function;
+            
+            it--;
+            //return funktionsergebnis
+            /*
+             Missing:
+             * 2 Funktionen in einer Zeile
+             * Funktion ohne Parameter
+             * Zahlen nicht returnbar
+             
+             */
+            return returnparam;
+            
+        }
+        
+        else {
+            it--;
+        }
+        
+        if (this->currentFunction->symbol_table.find( (*it).getIdentifier() ) == this->currentFunction->symbol_table.end()){
             cerr << "\033[1;31mError: Variable does not exist\033[0m" << endl;
             exit(1);
         }
         else {
             tmp->setVar((*it).getIdentifier());
-            return this->symbol_table.at( (*it).getIdentifier() );
+            return this->currentFunction->symbol_table.at( (*it).getIdentifier() );
         }
     }
     

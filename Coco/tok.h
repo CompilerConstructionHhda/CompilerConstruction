@@ -21,7 +21,8 @@ enum Tok{
     tok_right_par = -10,
     begin_code_block = -11,
     end_code_block = -12,
-    tok_comma = -13
+    tok_comma = -13,
+    tok_return = -14
     //operator (+, -)
 };
 

@@ -27,7 +27,7 @@ public:
     void Lexer(string filepath);
     void printAndEmptyList();
     void parseFunctions();
-    void parse(list<Token>::iterator it); //primary node Z()
+    float parse(list<Token>::iterator it); //primary node Z()
     void startMain();
     void printSyntaxTree();
     void printSymbolTable();

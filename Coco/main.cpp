@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     //myParser.printSyntaxTree();
     //myParser.printSymbolTable();
     //myParser.printAndEmptyList();
-    myParser.printFunctions();
+    //myParser.printFunctions();
     return 0;
 }
 

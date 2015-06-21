@@ -34,11 +34,25 @@ public:
     void SetInput(string param){
         inputParams.push_back(param);
     }
+    
+    list<string> getInputParams(){
+        return this->inputParams;
+    }
+    
+    void setIsVoid(bool param){
+        this->isVoid = param;
+    }
+    
+    bool getIsVoid(){
+        return isVoid;
+    }
+    
+    map <string, float> symbol_table;
 private:
     list<Token>::iterator it; //Zeiger auf lines of code
     string name;
     list<string> inputParams;
-    map <string, float> symbol_table;
+    bool isVoid;
     //TODO rücksprung
     
 };

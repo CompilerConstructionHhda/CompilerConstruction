@@ -8,4 +8,5 @@
 #include "Function.h"
 
 Function::Function() {
+    this->isVoid = true;
 }
