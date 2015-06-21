@@ -1,4 +1,9 @@
-func main(x, x) {
-pi := 24 + 4;
+func pow(x){
+    x := x*x;
+    return x;
+}
+
+func main() {
+pi := pow(4);
 pi;
 }

@@ -80,25 +80,6 @@ void Parser::Lexer(string filepath) {
             this->tokens.push_back(Token(identifier, tok_identifier));
         }
         
-        if (ispunct(ch)){
-            Tok t;
-            string ident = "";
-            switch (ch){
-                case '(': t = tok_left_par; 
-                    break;
-                case ')': t = tok_right_par; 
-                    break;
-                case '{': t = begin_code_block; 
-                    break;
-                case '}': t = end_code_block; 
-                    break;
-                case ',': t = tok_comma;
-                    break;
-            this->tokens.push_back(Token(ident, t));
-            }
-            ident += ch;
-        }
-        
         //int only
         if(isdigit(ch)){
             identifier = ch;
@@ -127,7 +108,23 @@ void Parser::Lexer(string filepath) {
             this->tokens.push_back(Token(identifier, tok_semi));
         }
      
-        
+        if (ispunct(ch)){
+            Tok t;
+            string ident = "";
+            ident += ch;
+            switch (ch){
+                case '(': this->tokens.push_back(Token(ident, tok_left_par)); 
+                    break;
+                case ')': this->tokens.push_back(Token(ident, tok_right_par)); 
+                    break;
+                case '{': this->tokens.push_back(Token(ident, begin_code_block)); 
+                    break;
+                case '}': this->tokens.push_back(Token(ident, end_code_block));
+                    break;
+                case ',': this->tokens.push_back(Token(ident, tok_comma));
+                    break;
+            }
+        }
 
     }
     this->tokens.push_back((Token("eof", tok_eof)));
@@ -141,6 +138,10 @@ void Parser::parse(){
     this->it = this->tokens.begin();
     while ((*it).getType() != tok_eof){
         this->currentLineValid = false;
+        
+        //it is func_declaration?
+        //parse function
+        
         this->root.push_back(new ZNode());
         this->currentNode = this->root.back();
         string var;

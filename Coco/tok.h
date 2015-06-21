@@ -17,12 +17,11 @@ enum Tok{
     tok_mult = -6,
     tok_semi = -7,
     tok_func_decl = -8,
-    tok_func_name = -9,
-    tok_left_par = -10,
-    tok_right_par = -11,
-    begin_code_block = -12,
-    end_code_block = -13,
-    tok_comma = -14
+    tok_left_par = -9,
+    tok_right_par = -10,
+    begin_code_block = -11,
+    end_code_block = -12,
+    tok_comma = -13
     //operator (+, -)
 };
 
