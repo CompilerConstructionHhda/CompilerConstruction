@@ -134,8 +134,86 @@ void Parser::Lexer(string filepath) {
 
 }
 
-void Parser::parse(){ 
+void Parser::parseFunctions(){
     this->it = this->tokens.begin();
+    while ((*it).getType() != tok_eof){
+        this->func();
+    }
+}
+
+void Parser::startMain(){
+    if (function_table.find("main") == function_table.end()){
+        cerr << "\033[1;31mERROR: No main function\033[0m" << endl;
+        exit(1);
+    }
+    this->currentFunction = function_table["main"];
+    this->parse(this->currentFunction->GetIt());
+    
+}
+
+void Parser::func(){
+    if((*it).getType() == tok_func_decl){
+        this->currentFunction = new Function();
+        it++;
+        funcName();
+        if((*it).getType() == begin_code_block){
+            it++;
+            this->currentFunction->SetIt(it);
+            while ((*it).getType() != end_code_block){
+                if ((*it).getType() == tok_eof){
+                    cerr << "\033[1;31mERROR: End of file before function ends\033[0m" << endl;
+                    exit(1); 
+                }
+                it++;
+            }
+            it++;
+            //end code block found
+            function_table[this->currentFunction->GetName()] = this->currentFunction;
+            return;
+        }else{
+            cout << "Funktion ist nicht richtig!" << endl;
+        }
+    }else{
+        cout << "Fail hier ist ein func" << endl;
+    }
+}
+
+void Parser::funcName(){
+    if((*it).getType() == tok_identifier){
+        this->currentFunction->SetName((*it).getIdentifier());
+        it++;
+        if((*it).getType() == tok_left_par){
+            it++;
+            param(false);
+        }else{
+            cout << "Nach dem Namen kommt ein Klammer" << endl;
+        }
+    }else {
+        cout << "Function hat keinen Namen" << endl;
+    }
+}
+
+void Parser::param(bool lastIsComma){
+    if((*it).getType() == tok_right_par && !lastIsComma){
+        it++;
+        return;
+    }else if((*it).getType() == tok_identifier){
+        this->currentFunction->SetInput((*it).getIdentifier());
+        it++;
+        if((*it).getType() == tok_comma){
+            it++;
+            param(true);
+        }else if((*it).getType() == tok_right_par){
+            it++;
+            return;
+        }else{
+            cout << "Klammer oder Komma verlangt" << endl;
+        }
+    }
+}
+
+void Parser::parse(list<Token>::iterator it){ 
+    this->it = it;
     while ((*it).getType() != tok_eof){
         this->currentLineValid = false;
         
@@ -356,5 +434,12 @@ void Parser::printAndEmptyList() {
             cout << currentToken.getValue();
         }
         cout << " is " << currentToken.getType() << endl;
+    }
+}
+
+void Parser::printFunctions(){
+    map<string, Function*>::iterator it;
+    for (it = function_table.begin(); it != function_table.end(); it++){
+        cout << "Func Name: " << it->first << "; Func: " << it->second->GetIt()->getType() << endl;
     }
 }

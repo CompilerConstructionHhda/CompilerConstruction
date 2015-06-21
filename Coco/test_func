@@ -4,6 +4,6 @@ func pow(x){
 }
 
 func main() {
-pi := pow(4);
+pi := 24 + 4;
 pi;
 }

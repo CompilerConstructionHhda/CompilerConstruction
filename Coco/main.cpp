@@ -15,10 +15,13 @@ const string filepath = "test_func";
 int main(int argc, char** argv) {
     Parser myParser;
     myParser.Lexer(filepath);
+    myParser.parseFunctions();
+    myParser.startMain();
     //myParser.parse();
     //myParser.printSyntaxTree();
     //myParser.printSymbolTable();
-    myParser.printAndEmptyList();
+    //myParser.printAndEmptyList();
+    myParser.printFunctions();
     return 0;
 }
 

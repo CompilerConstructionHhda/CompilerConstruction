@@ -15,10 +15,29 @@ using namespace std;
 class Function {
 public:
     Function();
+    list<Token>::iterator GetIt() const {
+        return it;
+    }
+
+    void SetIt(list<Token>::iterator it) {
+        this->it = it;
+    }
+
+    string GetName() const {
+        return name;
+    }
+
+    void SetName(string name) {
+        this->name = name;
+    }
+    
+    void SetInput(string param){
+        inputParams.push_back(param);
+    }
 private:
     list<Token>::iterator it; //Zeiger auf lines of code
     string name;
-    int params_count;
+    list<string> inputParams;
     map <string, float> symbol_table;
     //TODO rücksprung
     

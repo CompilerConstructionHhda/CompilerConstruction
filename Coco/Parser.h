@@ -11,6 +11,7 @@
 #include "TreeNode.h"
 #include "Token.h"
 #include "tok.h"
+#include "Function.h"
 #include <list>
 #include <map>
 #include <vector>
@@ -25,10 +26,15 @@ public:
     Token getNextToken();
     void Lexer(string filepath);
     void printAndEmptyList();
-    void parse(); //primary node Z()
+    void parseFunctions();
+    void parse(list<Token>::iterator it); //primary node Z()
+    void startMain();
     void printSyntaxTree();
     void printSymbolTable();
-    
+    void printFunctions();
+    void func();
+    void funcName();
+    void param(bool lastIsComma);
     void Z();
     string G2(); //is it an assignment or not
     bool D2(); // := or nothing
@@ -40,7 +46,9 @@ public:
 private:
     list <Token> tokens;
     map <string, float> symbol_table;
+    map <string, Function*> function_table;
     list<Token>::iterator it;
+    Function* currentFunction;
     bool currentLineValid;
     TreeNode* currentNode;
     vector<TreeNode*> root;
