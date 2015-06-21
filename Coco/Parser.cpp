@@ -56,14 +56,47 @@ void Parser::Lexer(string filepath) {
 
         //TODO klammern
         
+        //lex strings
         if (isalpha(ch)) {
             identifier = ch;
-            fin >> noskipws >> ch; //get next char
+            fin >> noskipws >> ch; 
             while (isalnum(ch) && !fin.eof()) {
                 identifier += ch;
                 fin >> noskipws >> ch;
+                //lex function declarations
+                if (identifier == "func"){
+                    if (ch == ' '){
+                        this->tokens.push_back(Token(identifier, tok_func_decl));
+                        fin >> noskipws >> ch;
+                        identifier = "";
+                        while (isalnum(ch) && !fin.eof()){
+                            identifier += ch;
+                            fin >> noskipws >> ch;
+                        }
+                        break;
+                    }
+                }
             }
             this->tokens.push_back(Token(identifier, tok_identifier));
+        }
+        
+        if (ispunct(ch)){
+            Tok t;
+            string ident = "";
+            switch (ch){
+                case '(': t = tok_left_par; 
+                    break;
+                case ')': t = tok_right_par; 
+                    break;
+                case '{': t = begin_code_block; 
+                    break;
+                case '}': t = end_code_block; 
+                    break;
+                case ',': t = tok_comma;
+                    break;
+            this->tokens.push_back(Token(ident, t));
+            }
+            ident += ch;
         }
         
         //int only
@@ -93,9 +126,11 @@ void Parser::Lexer(string filepath) {
             identifier = ch;
             this->tokens.push_back(Token(identifier, tok_semi));
         }
+     
         
 
     }
+    this->tokens.push_back((Token("eof", tok_eof)));
     fin.close();
 
     //manually eof
@@ -103,10 +138,9 @@ void Parser::Lexer(string filepath) {
 }
 
 void Parser::parse(){ 
-    
-    while (!this->tokens.empty()){
+    this->it = this->tokens.begin();
+    while ((*it).getType() != tok_eof){
         this->currentLineValid = false;
-        this->it = this->tokens.begin();
         this->root.push_back(new ZNode());
         this->currentNode = this->root.back();
         string var;
@@ -120,7 +154,8 @@ void Parser::parse(){
         else {
             cout << rechnung << endl;
         }
-        
+        it++;
+        /*
         Token t = this->tokens.front();
         while (t.getType() != tok_semi){
             this->tokens.pop_front();
@@ -128,6 +163,7 @@ void Parser::parse(){
         }
         this->tokens.pop_front();
     //löschen der zeile bis semikolon
+         * */
     }
 }
 
@@ -147,7 +183,8 @@ string Parser::G2(){
             
         }
         else {
-            it = this->tokens.begin(); //we know it's not an assignment, start from scratch
+            it--;
+            //it = this->tokens.begin(); //we know it's not an assignment, start from scratch
             this->currentNode = this->currentNode->getParent();
             return "";
         }
@@ -311,15 +348,12 @@ void Parser::printSymbolTable(){
 void Parser::printAndEmptyList() {
     while (!this->tokens.empty()) {
         Token currentToken = getNextToken();
-        if (currentToken.getType() == tok_identifier
-            || currentToken.getType() == tok_assign 
-            || currentToken.getType() == tok_plus
-            || currentToken.getType() == tok_mult
-            || currentToken.getType() == tok_semi) {
-            cout << currentToken.getIdentifier() << endl;
+        if (currentToken.getType() != tok_number) {
+            cout << currentToken.getIdentifier();
         }
         if (currentToken.getType() == tok_number) {
-            cout << currentToken.getValue() << endl;
+            cout << currentToken.getValue();
         }
+        cout << " is " << currentToken.getType() << endl;
     }
 }

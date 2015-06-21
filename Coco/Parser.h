@@ -29,6 +29,7 @@ public:
     void printSyntaxTree();
     void printSymbolTable();
     
+    void Z();
     string G2(); //is it an assignment or not
     bool D2(); // := or nothing
     float E(); // 
