@@ -72,7 +72,7 @@ void Parser::Lexer(string filepath) {
         if(isdigit(ch)){
             identifier = ch;
             fin >> noskipws >> ch;
-            while (isdigit(ch) && !fin.eof()){
+            while (isdigit(ch)|| ch =='.' && !fin.eof()){
                 identifier += ch;
                 fin >> noskipws >> ch;
             }
