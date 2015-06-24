@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     myParser.parseFunctions();
     myParser.startMain();
     //myParser.parse();
-    //myParser.printSyntaxTree();
+    myParser.printSyntaxTree();
     //myParser.printSymbolTable();
     //myParser.printAndEmptyList();
     //myParser.printFunctions();

@@ -57,12 +57,15 @@ void Parser::Lexer(string filepath) {
                 if (identifier == "return"){
                     if (ch == ' '){
                         this->tokens.push_back(Token(identifier, tok_return));
-                        fin >> noskipws >> ch;
+                        //fin >> noskipws >> ch;
                         identifier ="";
+                        break;
                     }
                 }
             }
+            if (identifier != ""){
             this->tokens.push_back(Token(identifier, tok_identifier));
+            }
         }
         
         //int only
